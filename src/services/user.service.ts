@@ -21,20 +21,17 @@ export class UserService extends CrudService<User> {
     }
 
     async findAll(): Promise<User[]> {
-        return this.prisma.user.findMany({
-            select: {
-                id: true,
-                nome: true,
-                morada: true,
-                email: true
-            }
-        });
+        return this.prisma.user.findMany();
     }
 
-    async findOne(id: string): Promise<any> {
-        return this.prisma.user.findUnique({
+    async findOne(id: string): Promise<User> {
+        const user = await this.prisma.user.findUnique({
             where: { id },
         });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        return user;
     }
 
     async update(id: string, data: Partial<User>): Promise<User> {
