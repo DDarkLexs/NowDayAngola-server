@@ -1,0 +1,7 @@
+export interface ICrud<T> {
+    create(data: T): Promise<T>;
+    findAll(): Promise<T[]>;
+    findOne(id: string): Promise<T>;
+    update(id: string, data: Partial<T>): Promise<T>;
+    delete(id: string): Promise<void>;
+}
