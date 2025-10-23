@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserService } from '../services/user.service';
-import { User } from '../interfaces/user.interface';
 
 export class UserController {
     private userService: UserService;

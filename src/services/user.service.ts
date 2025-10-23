@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { CrudService } from './crud.service';
-import { User } from '../interfaces/user.interface';
 
 export class UserService extends CrudService<User> {
     private prisma: PrismaClient;
@@ -14,7 +13,6 @@ export class UserService extends CrudService<User> {
         return this.prisma.user.create({
             data: {
                 nome: data.nome,
-                morada: data.morada,
                 email: data.email,
             }
         });
@@ -35,12 +33,7 @@ export class UserService extends CrudService<User> {
         return this.prisma.user.update({
             where: { id },
             data,
-            select: {
-                id: true,
-                nome: true,
-                morada: true,
-                email: true
-            }
+          
         });
     }
 

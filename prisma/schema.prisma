@@ -1,5 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma Schema
 
 generator client {
   provider = "prisma-client-js"
@@ -13,8 +12,65 @@ datasource db {
 model User {
   id     String @id @default(uuid())
   nome   String
+  senha  String?
+  email  String @unique
+  @@map("users")
+}
+
+// ---------------------
+// CLIENTE
+// ---------------------
+model Client {
+  id     String @id @default(uuid())
+  nome   String
   morada String
   email  String @unique
 
-  @@map("users")
+  // Relação com as encomendas
+  orders Order[]
+
+  @@map("clients")
+}
+
+// ---------------------
+// ARTIGO
+// ---------------------
+model Article {
+  id           String  @id @default(uuid())
+  ref          String  @unique
+  descricao    String
+  preco        Decimal @db.Decimal(10, 2)
+
+  // Relação com itens de encomenda
+  orderItems OrderItem[]
+
+  @@map("articles")
+}
+
+// ---------------------
+// ENCOMENDA
+// ---------------------
+model Order {
+  id         String   @id @default(uuid())
+  data       DateTime @default(now())
+  clienteId  String
+  cliente    Client   @relation(fields: [clienteId], references: [id])
+  // Uma encomenda tem vários itens
+  itens      OrderItem[]
+  @@map("orders")
+}
+
+// ---------------------
+// ITENS DA ENCOMENDA
+// ---------------------
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  articleId  String
+  quantidade Int
+  // Relações
+  order   Order   @relation(fields: [orderId], references: [id])
+  article Article @relation(fields: [articleId], references: [id])
+
+  @@map("order_items")
 }
