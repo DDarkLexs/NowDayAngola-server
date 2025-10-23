@@ -17,6 +17,18 @@ export class UserController {
         }
     }
 
+    async login(req: Request, res: Response, next: NextFunction) {
+        console.log("ok")
+        try {
+            const { email, password } = req.body;
+            // @ts-ignore
+            const user = await this.userService.login(email, password);
+            return res.status(200).json({ user });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async findAll(req: Request, res: Response, next: NextFunction) {
         try {
             const users = await this.userService.findAll();

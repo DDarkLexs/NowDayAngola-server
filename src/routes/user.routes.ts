@@ -7,6 +7,9 @@ const userController = new UserController();
 // Create a new user
 router.post('/', (req, res, next) => userController.create(req, res, next));
 
+// Login
+router.post('/login', (req, res, next) => userController.login(req, res, next));
+
 // Get all users
 router.get('/', (req, res, next) => userController.findAll(req, res, next));
 
