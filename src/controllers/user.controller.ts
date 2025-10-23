@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { UserService } from '../services/user.service';
 import { User } from '../interfaces/user.interface';
 
@@ -9,25 +9,25 @@ export class UserController {
         this.userService = new UserService();
     }
 
-    async create(req: Request, res: Response) {
+    async create(req: Request, res: Response, next: NextFunction) {
         try {
             const user = await this.userService.create(req.body);
             return res.status(201).json(user);
         } catch (error) {
-            return res.status(500).json({ message: 'Internal server error' });
+            return next(error);
         }
     }
 
-    async findAll(req: Request, res: Response) {
+    async findAll(req: Request, res: Response, next: NextFunction) {
         try {
             const users = await this.userService.findAll();
             return res.status(200).json(users);
         } catch (error) {
-            return res.status(500).json({ message: 'Internal server error' });
+            return next(error);
         }
     }
 
-    async findOne(req: Request, res: Response) {
+    async findOne(req: Request, res: Response, next: NextFunction) {
         try {
             const user = await this.userService.findOne(req.params.id);
             if (!user) {
@@ -35,25 +35,25 @@ export class UserController {
             }
             return res.status(200).json(user);
         } catch (error) {
-            return res.status(500).json({ message: 'Internal server error' });
+            return next(error);
         }
     }
 
-    async update(req: Request, res: Response) {
+    async update(req: Request, res: Response, next: NextFunction) {
         try {
             const user = await this.userService.update(req.params.id, req.body);
             return res.status(200).json(user);
         } catch (error) {
-            return res.status(500).json({ message: 'Internal server error' });
+            return next(error);
         }
     }
 
-    async delete(req: Request, res: Response) {
+    async delete(req: Request, res: Response, next: NextFunction) {
         try {
             await this.userService.delete(req.params.id);
-            return res.status(204).send();
+            return res.status(204).json({message: 'User deleted successfully'});
         } catch (error) {
-            return res.status(500).json({ message: 'Internal server error' });
+            return next(error);
         }
     }
 }
